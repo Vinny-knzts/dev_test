@@ -21,7 +21,7 @@ const AppDataSource = new DataSource({
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const initializeDatabase = async () => {
-  await wait(20000);
+  await wait(25000);
   try {
     await AppDataSource.initialize();
     console.log("Data Source has been initialized!");
@@ -35,10 +35,40 @@ initializeDatabase();
 
 app.post('/users', async (req, res) => {
 // Crie o endpoint de users
+
+const { firstName, lastName, email } = req.body;
+
+const user = new User();
+user.firstName = firstName;
+user.lastName = lastName;
+user.email = email;
+
+try {
+  const response = await AppDataSource.manager.save(user);
+  res.status(201).json({ message: "User has been registered!", id: response.id });
+} catch (err) {
+  res.status(400).json({ message: err });
+}
+
 });
 
 app.post('/posts', async (req, res) => {
 // Crie o endpoint de posts
+
+const { title, description, userId } = req.body;
+
+const post = new Post();
+post.title = title;
+post.description = description;
+post.user = userId;
+
+try {
+  const response = await AppDataSource.manager.save(post);
+  res.status(201).json({ message: "Post has been published!", id: response.id });
+} catch (err) {
+  res.status(400).json({ message: err });
+}
+
 });
 
 const PORT = process.env.PORT || 3000;

@@ -1,5 +1,20 @@
+CREATE DATABASE IF NOT EXISTS test_db;
+
 USE test_db;
 
---TODO Crie a tabela de user;
+CREATE TABLE IF NOT EXISTS user (
+	id INT AUTO_INCREMENT,
+  firstName varchar(100) NOT NULL,
+  lastName varchar(100) NOT NULL,
+  email varchar(100) NOT NULL,
+  PRIMARY KEY (id)
+);
 
---TODO Crie a tabela de posts;
+CREATE TABLE IF NOT EXISTS post (
+  id INT AUTO_INCREMENT,
+  title varchar(100) NOT NULL,
+  description varchar(100) NOT NULL,
+  userId int NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (userId) references user(id)
+);
